@@ -77,8 +77,16 @@ jobs:
       - name: Android Emulator Runner(Run Expresso Test)
         uses: ReactiveCircus/android-emulator-runner@v2.33.0
         with:
-           api-level: 33
-           script: ./gradlew connectedCheck
+           api-level: 30
+           target: default
+           arch: x86_64
+           profile: Nexus 6
+           emulator-options: '-no-window -no-boot-anim'
+           disable-animations: true
+           script: |
+             adb wait-for-device
+             adb shell input keyevent 82
+             ./gradlew connectedCheck
 
       - name: Upload Instrumentation Test Report
         uses: actions/upload-artifact@v4.4.3
