@@ -61,7 +61,7 @@ jobs:
 
   instrumentation-test:
      needs: [unit-test]
-     runs-on: ubuntu-latest
+     runs-on: macos-latest
      steps:
       - uses: actions/checkout@v4
 
@@ -78,14 +78,7 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2.33.0
         with:
            api-level: 30
-           target: default
-           arch: x86_64
-           profile: Nexus 6
-           emulator-options: '-no-window -no-boot-anim'
-           disable-animations: true
-           script: |
-             adb wait-for-device
-             adb shell input keyevent 82
+           script: 
              ./gradlew connectedCheck
 
       - name: Upload Instrumentation Test Report
