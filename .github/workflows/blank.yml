@@ -32,6 +32,31 @@ jobs:
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4.4.3
         with: 
-          name: index.html
+          name: lint.html
           path: app/build/reports/lint-results-debug.html
+
+  unit-test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.4.0
+        with:
+          java-version: '17.0.11'
+          distribution: 'temurin'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Running Lint Debug
+        run: ./gradlew test
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4.4.3
+        with: 
+          name: unit-test-report
+          path: app/build/reports/testDebugUnitTest
+    
 
