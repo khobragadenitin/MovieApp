@@ -60,31 +60,33 @@ jobs:
           path: app/build/reports/tests/testDebugUnitTest/
 
   instrumentation-test:
-     needs: [unit-test]
-     runs-on: macos-latest
-     steps:
-      - uses: actions/checkout@v4
+    needs: [lint]
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4.4.0
-        with:
-          java-version: '17.0.11'
-          distribution: 'temurin'
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4.4.0
+      with:
+        java-version: '17.0.11'
+        distribution: 'temurin'
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
 
-      - name: Android Emulator Runner(Run Expresso Test)
-        uses: ReactiveCircus/android-emulator-runner@v2.33.0
-        with:
-           api-level: 30
-           script: 
-             ./gradlew connectedCheck
+    - name: Run Android Emulator and Espresso Tests
+      uses: ReactiveCircus/android-emulator-runner@v2.33.0
+      with:
+        api-level: 30
+        target: default  # Specify a target (e.g., 'default', 'google_apis', etc.)
+        arch: x86_64     # Specify the architecture
+        profile: Nexus 6 # Optionally, specify the emulator profile
+        script: adb wait-for-device && ./gradlew connectedCheck
 
-      - name: Upload Instrumentation Test Report
-        uses: actions/upload-artifact@v4.4.3
-        with: 
-          name: instrumentation-test-report
-          path: app/build/reports/androidTests/connected/
-       
+    - name: Upload Instrumentation Test Report
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: instrumentation-test-report
+        path: app/build/reports/androidTests/connected/
+
 
