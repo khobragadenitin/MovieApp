@@ -33,5 +33,5 @@ jobs:
         uses: actions/upload-artifact@v4.4.3
         with: 
           name: index.html
-          path: app/build/report/lint-results-debug.html
+          path: app/build/reports/lint-results-debug.html
 
